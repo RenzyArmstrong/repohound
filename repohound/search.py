@@ -4,6 +4,9 @@ import json
 import os
 import urllib.request
 import urllib.parse
+from pathlib import Path
+
+HOME = Path.home()
 
 
 def _get_token():
@@ -11,14 +14,13 @@ def _get_token():
     if tok:
         return tok
     for p in [
-        os.path.expanduser("~/.repohound/token"),
-        os.path.expanduser("~/.config/repohound/token"),
-        os.path.expanduser("~/.hermes/tokens/github_renzy.token"),
-        os.path.expanduser("~/.hermes/tokens/github.token"),
+        HOME / ".repohound" / "token",
+        HOME / ".config" / "repohound" / "token",
+        HOME / ".hermes" / "tokens" / "github_renzy.token",
+        HOME / ".hermes" / "tokens" / "github.token",
     ]:
-        if os.path.exists(p):
-            with open(p) as f:
-                return f.read().strip()
+        if p.exists():
+            return p.read_text().strip()
     return ""
 
 
